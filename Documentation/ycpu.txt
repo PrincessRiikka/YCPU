@@ -1,5 +1,12 @@
 YCPU Specification
-Version 0.9 RELEASE CANDIDATE
+Version 0.9b - New memory model in progress
+- YCPU is connected to rest of system through YBUS.
+- YBUS is 16 lines + control lines.
+- YBUS Controller takes place of YCPU MMU. Has DMA.
+- Protocol inspired by 1993-era Rambus.
+- Do I need a cache on the chip? If so, how much?
+- At this point, shouldn't I be pipelining the chip?
+- Am I getting too complicated?
 
 ### Table of Contents ##########################################################
 
@@ -93,6 +100,8 @@ These instructions often change the value of the eight general purpose
 registers, which are named r0, r1, r2, r3, r4, r5, r6, and r7. Assemblers should
 also accept the names A, B, C, D, W, X, Y, and Z for these registers.
 
+Note that the YCPU is not pipelined.
+
 
 === 2.A. Math instructions  ====================================================
 
@@ -135,12 +144,13 @@ The math instructions are:
     EOR     R = R ^ M   Bitwise exclusive or.
     LOD     R = M       Sets R equal to value of M.
     MDI     R = R % M   Signed modulus.
-    MLI     R = R * M   Signed multiply, 32-bit result: High 16-bits of result
-                        are stored in R0. If R is R0, R0 will equal that low
+    MLI     R = R * M   Signed multiply, 32-bit result: high 16-bits of result
+                        are stored in R0. If R is R0, R0 will equal the low
                         16-bits of the result, and the high 16-bits are lost.
     MOD     R = R % M   Unsigned moduls.
-    MUL     R = R * M   Unsigned multiply. As with MLI, the high 16-bits of the
-                        the result are stored in R0, and may be overwritten.
+    MUL     R = R * M   Unsigned multiply. As with MLI, high 16-bits of result
+                        are stored in R0. If R is R0, R0 will equal the low
+                        16-bits of the result, and the high 16-bits are lost.
     NEG     R = 0 - M   Bitwise negation.
     NOT     R = !M      Bitwise NOT.
     ORR     R = R | M   Bitwise OR.
@@ -324,10 +334,11 @@ The stack Instructions are:
     POP     Pop values from the Stack into registers.
     PSH     Push values of registers onto the Stack.
     
-In addition, you may use the STX instruction to directly modify the stack with
-an immediate value. The format of the STX instruction is "STX V" where V is a
-value from -128 to 127. Following this instruction, the stack will be modified
-by the given number of 16-bit words relative to its previous value.
+In addition, you may use the STX instruction to directly modify the stack 
+register with an immediate value. The format of the STX instruction is
+"STX V" where V is a value from -128 to 127. Following this instruction,
+the stack register will be modified by the given number of 16-bit words
+relative to its previous value.
 
 
 === 2.H. Processor Functions ===================================================
@@ -386,7 +397,7 @@ of the result in R0, which would overwrite the high bits, or choose a different
 register for the destination of the low bits.
 
 With regards to addresses, the 16-bit limit means that all logical addresses
-can only address 64 kilobytes of memory at any time. However, using a memory
+can only address 64 kilobytes of memory at any time. However, using the memory
 management unit (MMU), the processor can access multiple 64 kilobyte areas of
 the processor at once. These areas are called 'segments'. For example, the
 processor might read code from one segment while copying data from a second 
@@ -433,12 +444,12 @@ as fast as an aligned 16-bit load, regardless of alignment.
 
 When the processor first powers on and each time it is RESET, it returns to a
 known state described in 3.G. The processor then executes instructions located
-in an on-board read only memory (ROM) chip. To access this chip, the processor
+in a required read only memory (ROM) chip. To access this chip, the processor
 relies on a hardware bus (YBUS). Thus, to execute any instructions the processor
-must be connected to a bus and a ROM chip. Of course, any useful work will
-likely require random access memory (RAM) as well, but RAM is not required power
-on the processor. Note that the amount of RAM and ROM available to the
-processor is not known to the processor. However, a programmer can query the
+must be connected to a bus and through the bus, a ROM chip. Of course, any useful
+work will likely require random access memory (RAM) as well, but RAM is not
+required to power on the processor. Note that the amount of RAM and ROM available
+to the processor is not known to the processor. However, a programmer can query the
 amount of RAM/ROM with the instruction HWQ $03. For more information about this
 query operation, see 3.C.1.
 
