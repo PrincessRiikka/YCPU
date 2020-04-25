@@ -26,6 +26,7 @@ Version 0.9 RELEASE CANDIDATE
         4.G.        Jump & Call Instructions
         4.H.        Stack Instructions
         4.I.        Processor Function Instructions
+        4.J.        Auxiliary Instructions
         5.      History
 
 
@@ -361,6 +362,17 @@ great detail throughout Section 3. The processor function instructions are:
     
     SWI                     Call software interrupt. Reference 3.D.3.
     
+=== 2.I. Auxiliary Instructions ===============================================
+
+The processor also supports one SET instruction. This instruction is intended for
+the presumed common cases of storing small positive and negative numbers and
+writing single-bit masks. For this reason the syntax is relatively complex.
+
+    SET R, V                Set the value of register R to a value within ranges:
+                            $00 to $1F (0 to 31)
+                            2^n for n between 5 and 15 inclusive
+                                (2^5 to 2^15 but only powers of 2)
+                            $FFE0 to $FFFF (-32 to -1)
 
 ### 3. Hardware Information ####################################################
 
@@ -1984,7 +1996,7 @@ Should be transformed into:
     
     
 POP         Pop values from the Stack into registers
-Syntax: Pop Rx[,Rx,Rx...]
+Syntax: POP Rx[,Rx,Rx...]
 The processor sequentially loads values from the stack to the registers
 specified. Regardless of the order of the registers specified in the
 instruction, the registers are always popped in the following order:
@@ -1993,7 +2005,7 @@ instruction, the registers are always popped in the following order:
     
     
 PSH         Push values from registers to the Stack
-Syntax: Pop Rx[,Rx,Rx...]
+Syntax: PSH Rx[,Rx,Rx...]
 The processor sequentially saves a number of values from the stack equal to
 the number of registers specified.
 Regardless of the order of the registers specified in the instruction, the
@@ -2083,6 +2095,15 @@ SWI         Call Software Interrupt
 Raises SOFTWARE INTERRUPT.
 See 3.D.3. for a description of this opcode's function.
 
+=== 4.J. Auxiliary Instructions ===============================================
+
+SET         Set the contents of a register
+Operation:  M -> Rx
+The specified value is loaded into the specified register. Allowed values follow:
+    $00 to $1F (0 to 31)
+    2^n for n between 5 and 15 inclusive
+        (2^5 to 2^15 but only powers of 2)
+    $FFE0 to $FFFF (-32 to -1)
 
 ### 5. History #################################################################
 Please refer to the file 'ycpu history.txt' for a complete history of revisions
