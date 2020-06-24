@@ -65,7 +65,7 @@ sequence (3.G.), the real time clock (3.H.), and how to switch context (3.I.).
 
 Section 4 details how instructions are encoded into 16-bit program words, as
 well as the exact function of every instruction, including how these functions 
-effect memory and flags.
+affect memory and flags.
 
 
 === 1.A. Public Domain Dedication ==============================================
@@ -194,13 +194,13 @@ The format of Bit-shifting instructions is:
 The bit-shifting instructions are:
 
     ASL     Shifts all bits in R by V bits to the left.
-            Leftmost bits are set to 0.
-    ASR     Shifts all bits in R by V bits to the right.
-            Rightmost bits are set to original value of bit 15.
-    LSL     Shifts all bits in R by V bits to the left.
-            Leftmost bits are set to 0.
-    LSR     Shifts all bits in R by V bits to the right.
             Rightmost bits are set to 0.
+    ASR     Shifts all bits in R by V bits to the right.
+            Leftmost bits are set to original value of bit 15.
+    LSL     Shifts all bits in R by V bits to the left.
+            Rightmost bits are set to 0.
+    LSR     Shifts all bits in R by V bits to the right.
+            Leftmost bits are set to 0.
     RNL     Rotates all bits in R by V bits to the left, not using carry bit.
     RNR     Rotates all bits in R by V bits to the right, not using carry bit.
     ROL     Rotates all bits in R by V bits to the left, through the carry bit.
@@ -1727,7 +1727,7 @@ positions to shift. When specified as a register:
 
 
 ASL         Arithmetic Shift Left
-Shifts all the bits of Rx X bits to the left. The leftmost X bits are set to 0.
+Shifts all the bits of Rx X bits to the left. The rightmost X bits are set to 0.
 The carry flag is set if any bits shifted out were 1, otherwise clear. The
 result is that Rx is multiplied by 2^X, treating Rx as an unsigned word, and
 setting the carry flag if the result does not fit in 16 bits.
@@ -1743,7 +1743,7 @@ Operation:
     
     
 ASR         Arithmetic Shift Right
-Shifts all the bits of Rx X bits to the right. The rightmost X bits are copied
+Shifts all the bits of Rx X bits to the right. The leftmost X bits are copied
 from the old bit 15. The carry flag is set if any bits shifted out were 1,
 otherwise clear. The result is that Rx is divided by 2^X, treating Rx as a
 signed word, and setting the carry flag if the result does not fit in 16 bits.
@@ -1768,7 +1768,7 @@ Operation:
     
     
 LSR         Logical Shift Right
-Shifts all the bits of Rx X bits to the right. The rightmost X bits are set to
+Shifts all the bits of Rx X bits to the right. The leftmost X bits are set to
 zero. The carry flag is set if any bits shifted out were 1, otherwise clear. The
 result is that Rx is divided by 2^X, treating Rx as an unsigned word, and
 setting the carry flag if the result does not fit in 16 bits.
