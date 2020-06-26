@@ -1832,7 +1832,7 @@ BTX         Test a bit and change it
 Operation:  !Rx{B} -> Rx{B}, Z, C
     N [Negative] Not affected.
     Z [Zero] Set if old Rx{B} was clear, clear otherwise.
-    C [Carry] Set if new Rx{B} is set.
+    C [Carry] Set if old Rx{B} was set.
     V [Overflow] Not affected.
 
     
