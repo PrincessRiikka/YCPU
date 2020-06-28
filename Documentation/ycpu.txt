@@ -950,10 +950,10 @@ Each segment register is 32 bits in size:
     DWPA ssss ssss bbbb     bbbb bbbb bbbb bbbb
 
     D - Hardware device flag:
-        0:  Accesses to this segment will come from main memory.
-        1:  Accesses to this segment will come from the hardware device at 
+        0:  Accesses to this segment will target main memory.
+        1:  Accesses to this segment will target the hardware device at 
             the index equal to the upper four 'b' bits (0-15). Where these bits
-            are 0000, the accesses will come from the computer's onboard ROM 
+            are 0000, the accesses will target the computer's onboard ROM 
             chip.
             
     W - Write protection flag:
@@ -997,7 +997,7 @@ segments were set to these values:
 
 --- 3.F.3. ADDRESS TRANSLATION WHEN THE MMU IS ENABLED ------------------------
 
-Whem the M status bit in PS is set, the MMU is enabled, and will translate
+When the M status bit in PS is set, the MMU is enabled, and will translate
 memory references to physical addresses using the contents of the segment
 registers. This is done by adding the segment base address to the address of
 the specified reference. The translation is as follows:
@@ -1028,9 +1028,8 @@ access memory (RAM) on the YBUS.
 
 The segment used for a given memory address is implied by the opcode of the
 executing instruction. All instructions, operands and immediate values are
-taken from the Code Segment. All stack instructions (push, pop) are taken
-from the Stack Segment. All other instructions can use either the Data
-Segment or the Extra data Segment.
+taken from the Code Segment. All stack instructions (push, pop) use the Stack Segment.
+All other instructions can use either the Data Segment or the Extra data Segment.
 
 Note that there are different Segment Registers for user and supervisor mode.
 The supervisor can set both sets of Segment Registers, while the user mode can
