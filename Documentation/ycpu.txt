@@ -1007,7 +1007,7 @@ registers. This is done by adding the segment base address to the address of
 the specified reference. The translation is as follows:
 
 If the 'D' bit is set, then the YCPU requests device memory space from the YBUS
-from the device with index equal to the upper 4-bits of the 'd' bits. If this
+from the device with index equal to the upper 4-bits of the 'b' bits. If this
 index equals 0, then the memory access is to on-board read only memory.
     1. The low 16-bit 'base address' portion of the segment register is
        shifted left by 8 (multiplied by 256).
