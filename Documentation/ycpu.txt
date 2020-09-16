@@ -1298,12 +1298,12 @@ LOW OCTET   Mnemonic    Priv?   Bit Pattern     Description               Cycles
 
 ALU Bit Pattern
     FEDC BA98 7654 3210                             
-    sAAA rrrE OOOO ORRR
+    sAAA rrre OOOO ORRR
         R = Destination/Source Register
         O = Opcode
         A = Addressing Mode
         r = Second Operand Register.
-        E = 8-bit Mode. See Note 1, below.
+        e = 8-bit Mode. See Note 1, below.
         s = Extra Data Segment select. See Note 2, below.
         i = Index Register. See Note 3, below.
         p = processor control register index. See Note 4, below.
