@@ -1972,7 +1972,7 @@ registers SP, FL, PC, PS, USP.
 
 Two notes on pushing and pulling the stack pointers. First, 'SP' and 'USP' is
 the value of these stack pointers BEFORE the operation. Thus if SP is $1000 and
-the operation 'PSH SP' is called, SP will now be $0FFF and the first value on
+the operation 'PSH SP' is called, SP will now be $0FFE and the first value on
 the stack will be $1000. Second, 'SP' equates to the current stack pointer, and
 thus could be either USP or SSP depending on the mode of the processor.
 Executing 'PSH USP, SP' in user mode will push USP to the stack twice; the same
