@@ -2014,9 +2014,9 @@ values registers are always pushed in the following order:
     Bit pattern 0: R0, R1, R2, R3, R4, R5, R6, R7
     Bit pattern 1: SP, USP, PS, PC, FL
     
-STX         Manipulate the stack with an immediate value.
+STX         Manipulate the stack pointer with an immediate value.
 Syntax: STX [-$80 to $7F]
-The signed offset is added to SP. Because stack values must be 16-bit aligned,
+The signed offset is added to SP. Because SP values must be 16-bit aligned,
 the offset is shifted left by 1 bit (multiplied by 2) to allow for an effective
 range of -256 to +254 bytes (-128 to +127 stack positions) relative to the
 current value of SP.
