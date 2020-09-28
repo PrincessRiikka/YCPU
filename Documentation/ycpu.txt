@@ -1961,14 +1961,14 @@ JSR         Unconditional Jump, saving return address.
 === 4.H. Stack Instructions ====================================================
 
 The following registers can be specified for Stack Instructions:
-R0-R7, A-D, W-Z, FL, PC, PS, SP, USP. Specifying a register
+R0-R7 (A-D, W-Z), FL, PC, PS, SP, USP. Specifying a register
 twice (ex. R0 and A) will result in only one value popped to or pushed from
 that register.
 
 There are two separate instructions for pop and two for pull, each addressing a
 different set of registers. The first operation pops or pulls the eight general
 purpose registers, R0-R7. The second operation pops or pulls processor control
-registers SP, Fl, PC, PS, USP. 
+registers SP, FL, PC, PS, USP. 
 
 Two notes on pushing and pulling the stack pointers. First, 'SP' and 'USP' is
 the value of these stack pointers BEFORE the operation. Thus if SP is $1000 and
