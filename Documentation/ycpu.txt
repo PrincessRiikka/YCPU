@@ -324,9 +324,9 @@ The stack Instructions are:
     POP     Pop values from the Stack into registers.
     PSH     Push values of registers onto the Stack.
     
-In addition, you may use the STX instruction to directly modify the stack with
+In addition, you may use the STX instruction to directly modify the stack pointer with
 an immediate value. The format of the STX instruction is "STX V" where V is a
-value from -128 to 127. Following this instruction, the stack will be modified
+value from -128 to 127. Following this instruction, the stack pointer will be modified
 by the given number of 16-bit words relative to its previous value.
 
 
@@ -894,8 +894,8 @@ ALU instructions are by default 16 bits wide. Thus, all LOD instructions take
 16 bits from memory, and ADD instructions operate on all 16 bits of memory.
 There is an alternate 8-bit mode for ALU instructions (ADD, STO, LOD, etc.):
 
-    LOD.8   [$8000]
-    STO.8   [R4]
+    LOD.8   R0, [$8000]
+    STO.8   R0, [R4]
     
 These alternate instructions will operate on only the lower 8-bits of a
 register. 8-bit LOD instructions will load a single byte into memory from a
