@@ -1961,7 +1961,9 @@ JSR         Unconditional Jump, saving return address.
 === 4.H. Stack Instructions ====================================================
 
 The following registers can be specified for Stack Instructions:
-R0-R7 (A-D, W-Z), FL, PC, PS, SP, USP. 
+R0-R7 (A-D, W-Z), FL, PC, PS, SP, USP. Specifying a register
+twice (ex. R0 and A) will result in only one value popped to or pushed from
+that register.
 
 There are two separate instructions for pop and two for pull, each addressing a
 different set of registers. The first operation pops or pulls the eight general
@@ -1973,24 +1975,49 @@ the value of these stack pointers BEFORE the operation. Thus if SP is $1000 and
 the operation 'PSH SP' is called, SP will now be $0FFE and the first value on
 the stack will be $1000. Second, 'SP' equates to the current stack pointer, and
 thus could be either USP or SSP depending on the mode of the processor.
+Executing 'PSH USP, SP' in user mode will push USP to the stack twice; the same
+instruction in supervisor mode will push both USP and SSP to the stack.
 
 Note that pushing and pulling 'PS', the processor status register, is a
 privileged operation. Attempting to push or pull this register in user mode
-will result in an 'Unprivileged opcode' interrupt.         
+will result in all other specified registers being pushed or pulled, followed by
+an 'Unprivileged opcode' interrupt.
+
+An assembler should transform a stack operation that includes registers from 
+these two different register groups should split the operation into two
+separate instructions as follows: general purpose registers should always be
+popped first, and pushed last. Thus these two example instructions:
+    PSH R0, R1, SP, PC
+    POP R0, R1, SP, PC              
+Should be transformed into:
+    PSH SP, PC
+    PSH R0, R1
+    POP R0, R1                      
+    POP SP, PC              
     
     
-POP         Pop a value from the Stack into a register
-Syntax: POP Rx
-The processor loads a value from the stack to the register specified. 
+POP         Pop values from the Stack into registers
+Syntax: POP Rx[,Rx,Rx...]
+The processor sequentially loads values from the stack to the registers
+specified. Regardless of the order of the registers specified in the
+instruction, the registers are always popped in the following order:
+    Bit pattern 0: R7, R6, R5, R4, R3, R2, R1, R0
+    Bit pattern 1: FL, PC, PS, USP, SP
     
-PSH         Push a value from a register to the Stack
-Syntax: PSH Rx
-The processor saves a value to the stack from the register specified
+    
+PSH         Push values from registers to the Stack
+Syntax: PSH Rx[,Rx,Rx...]
+The processor sequentially saves a number of values from the stack equal to
+the number of registers specified.
+Regardless of the order of the registers specified in the instruction, the
+values registers are always pushed in the following order:
+    Bit pattern 0: R0, R1, R2, R3, R4, R5, R6, R7
+    Bit pattern 1: SP, USP, PS, PC, FL
     
 STX         Manipulate the stack pointer with an immediate value.
 Syntax: STX [-$80 to $7F]
 The signed offset is added to SP. Because SP values must be 16-bit aligned,
-the offset is shifted left by 1 bit (effectively multiplied by 2) to allow for an effective
+the offset is shifted left by 1 bit (multiplied by 2) to allow for an effective
 range of -256 to +254 bytes (-128 to +127 stack positions) relative to the
 current value of SP.
 
